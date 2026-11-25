@@ -34,7 +34,7 @@
 
 //Types of middlewares
 //1. Application middleware
-//2. Multiple middleware
+//2. Router-level middleware(Multiple)
 //3. Built-in middleware
 //4. Third party middleware
 //5. Error handling middleware
@@ -69,7 +69,7 @@
 // })
 
 
-//2. Multiple middleware
+// Multiple middleware
 // import express from 'express';
 // const app=express();
 
@@ -113,3 +113,61 @@
 // app.listen(3000,()=>{
 //     console.log("Server running at http://localhost:3000");
 // })
+
+
+// import express from 'express';
+// const app=express();
+
+// //middleware to parse form data
+// app.use(express.urlencoded({extended:true}));
+
+// //middleware to serve static files
+// app.use(express.static('public'));
+
+// app.post('/register',(req,res)=>{
+//     const {username,email,password}=req.body;
+//     console.log("Username:",username);
+//     console.log("Email:",email);
+//     console.log("Password:",password);
+//     res.send(`
+//         <h1>Registration Successfull</h1>
+//         <p>Username:${username}</p>
+//         <p>Email:${email}</p>
+//         `)
+// });
+    
+// app.listen(3000,()=>{
+//     console.log("Server running at http://localhost:3000");
+// })
+
+
+// import express from 'express';
+// import adminRouter from './adminRouter.js';
+
+// const app=express();
+
+// app.use('/admin',adminRouter);
+
+// app.listen(3000,()=>{
+//     console.log("Server running at http://localhost:3000");
+    
+// })
+
+
+import express from 'express';
+const app=express();
+
+app.get('/',(req,res,next)=>{
+    const error=new Error("Something Went Wrong");
+    next(error);
+})
+
+app.use((err,req,res,next)=>{
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
+})
+
+app.listen(3000,()=>{
+    console.log("Server running at http://localhost:3000");
+})
+    
